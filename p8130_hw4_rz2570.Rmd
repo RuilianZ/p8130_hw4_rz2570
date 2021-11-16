@@ -1,38 +1,79 @@
 ---
-title: "P8130 Homework 4"
-author: "Ruilian Zhang"
+titie: "P8130 Homework 4"
+author: "Ruiiian Zhang"
 date: "11/9/2021"
 output: pdf_document
 ---
 
 
-```{r}
+```{r, message = FALSE}
 library(tidyverse)
 ```
 
 
 ## Problem 1
 
-$H_0: \sum_{i=1}^{k} \sum_{j=1}^{n_i} (y_{ij}-\bar{\bar{y}})^2 = \sum_{i=1}^{k} \sum_{j=1}^{n_i} (y_{ij}-\bar{y_l})^2 + \sum_{i=1}^{k} \sum_{j=1}^{n_i} (\bar{y_l}-\bar{\bar{y}})^2$  
-$H_a:\sum_{i=1}^{k} \sum_{j=1}^{n_i} (y_{ij}-\bar{\bar{y}})^2 \neq \sum_{i=1}^{k} \sum_{j=1}^{n_i} (y_{ij}-\bar{y_l})^2 + \sum_{i=1}^{k} \sum_{j=1}^{n_i} (\bar{y_l}-\bar{\bar{y}})^2$
+Proof: $\sum_{i=1}^{k} \sum_{j=1}^{n_i} (y_{ij}-\bar{\bar{y}})^2 = \sum_{i=1}^{k} \sum_{j=1}^{n_i} (y_{ij}-\bar{y_i})^2 + \sum_{i=1}^{k} \sum_{j=1}^{n_i} (\bar{y_i}-\bar{\bar{y}})^2$  
+
+
+$\sum_{i=1}^{k} \sum_{j=1}^{n_i} (y_{ij}-\bar{\bar{y}})^2 \\ = \sum_{i=1}^{k} \sum_{j=1}^{n_i} (y_{ij}-\bar{y_i} + \bar{y_i} - \bar{\bar{y}})^2 \\ =  \sum_{i=1}^{k} \sum_{j=1}^{n_i} (y_{ij}-\bar{y_i})^2 + \sum_{i=1}^{k} \sum_{j=1}^{n_i} (\bar{y_i}-\bar{\bar{y}})^2 + 2\sum_{i=1}^{k} \sum_{j=1}^{n_i} (y_{ij} - \bar{y_i}) (\bar{y_i} - \bar{\bar{y}})$
+
+Since $\sum_{j=1}^{n_i} (y_{ij} - \bar{y_i}) = n_i\bar{y_i} - n_i\bar{y_i} = 0$
+
+We have $2\sum_{i=1}^{k} \sum_{j=1}^{n_i} (y_{ij} - \bar{y_i}) (\bar{y_i} - \bar{\bar{y}}) = 0$
+
+Thus $\sum_{i=1}^{k} \sum_{j=1}^{n_i} (y_{ij}-\bar{\bar{y}})^2 = \sum_{i=1}^{k} \sum_{j=1}^{n_i} (y_{ij}-\bar{y_i})^2 + \sum_{i=1}^{k} \sum_{j=1}^{n_i} (\bar{y_i}-\bar{\bar{y}})^2$
+
+
+
+## Problem 2
 
 ```{r}
-a = rnorm(10, 3, 2)
-b = rnorm(10, 3, 1)
-c = rnorm(10, 5, 2)
-d = rnorm(10, 4, 3)
-e = rnorm(10, 4, 3)
-
-data = c(a, b, c, d, e)
-
-grand_mean = mean(data)
-
-
-
-a_mean = mean(a)
-b_mean = mean(b)
-c_mean = mean(c)
-d_mean = mean(d)
-e_mean = mean(e)
+crash_df = read_csv("data/crash.csv")
 ```
+
+### a)
+
+```{r}
+descrip_groups = function(group) {
+  
+  mean = mean(group, na.rm = TRUE)
+  range = max(group, na.rm = TRUE) - min(group, na.rm = TRUE)
+  sd = sd(group, na.rm = TRUE)
+  
+  return(
+    tibble(
+      mean = mean,
+      range = range,
+      sd = sd
+    )
+  )
+  
+}
+
+descrip_groups(crash_df$pedestrian)
+
+descrip_results = map(crash_df, descrip_groups)
+
+
+bind_rows(
+    descrip_results$pedestrian, 
+    descrip_results$bicycle,
+    descrip_results$car
+  ) %>% 
+  mutate(
+    crash_type = c("pedesterian", "bicycle", "car")) %>% 
+  relocate(crash_type) %>% 
+  knitr::kable(digits = 3)
+```
+
+* Patients with pedestrian crash has the highest average PTSD score of 37.875, compared to the average score of 32.500 in bicycle group and 23.429 in car group.  
+* The range of PTSD score in pedestrian group is 14, which is slightly wider than the bicycle group (11) and the car group (11).  
+* Patients with pedestrian crash has the highest standard deviation of PTSD score of 5.436, compared to the standard deviation of 4.062 in bicycle group and 3.867 in car group.  
+
+```{r}
+
+```
+
+
 
