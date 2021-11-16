@@ -73,8 +73,8 @@ bind_rows(
 
 ### b)
 
-$H_0$: All the group means of PTSD score are equal.  
-$H_1$: Not all the group means of PTSD score are equal.
+$H_0$: all the group means of PTSD score are equal.  
+$H_1$: not all the group means of PTSD score are equal.
 
 ```{r}
 crash_df = 
@@ -112,8 +112,49 @@ $\alpha^* = 0.01/3 = 0.0033$
 $t_{crit} = t_{22, 0.9967} = 2.9996$
 
 The p-value between car and bicycle group is 0.0014, the p-value between pedestrian and bicycle group is 0.0586, the p-value between pedestrian and car group is 9.1e-06, which are all smaller than the adjusted significance level $\alpha^* = 0.0033$. 
-Thus we can draw a conclusion that all three groups pairwisely have different means from each other.
+Thus we can draw a conclusion that all three groups pairwise have different means from each other.
 
 ### d)
 
 Patients with pedestrian crash have the highest PSTD score with a average of 37.875, patients with bicycle crash have a average PTSD score of 32.500, and patients in bicycle group have a average PTSD score of 23.429. Patients with pedestrian crash also has the highest range and standard deviation compared to the other two groups. Based on a type I error of 0.01, the average of PTSD score across different crash type are significantly different, and we found that the average score of each two groups are pairwise different. 
+
+
+## Problem 3
+
+### a)
+
+We can use chi-squared test for homogeneity, since the data qualifies the following assumptions:  
+* Independent random samples  
+* No expected cell counts are 0, and no more than 20% of the cells have an expected count less than 5  
+
+### b)
+
+```{r}
+drug_data = 
+  matrix(
+    c(15, 18, 18, 15, 20, 13),
+    nrow = 3,
+    ncol = 2, 
+    byrow = TRUE,
+    dimnames = 
+      list(c("desipramine", "lithium", "placebo"), c("relapsed", "not_relapsed")))
+
+chisq.test(drug_data)
+```
+
+### c)
+
+$H_0$: the proportions of relapse among drug/placebo are equal; and proportions of non-relapse among drug/placebo are equal.  
+$H_1$: not all the proportions are equal.  
+
+```{r}
+qchisq(0.95, 2)
+```
+
+$p-value = 0.4623$
+$\chi_{stats} = 1.543$  
+$\chi_{crit} = 5.991$  
+$\chi_{stats} < \chi_{crit}$  
+
+Base on 5% level of significance, we do not have enough evidence to reject $H_0$. We can draw a conclusion that the proportions of relapse among drug/placebo are equal; and proportions of non-relapse among drug/placebo are equal.
+
