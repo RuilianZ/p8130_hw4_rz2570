@@ -71,6 +71,34 @@ bind_rows(
 * The range of PTSD score in pedestrian group is 14, which is slightly wider than the bicycle group (11) and the car group (11).  
 * Patients with pedestrian crash has the highest standard deviation of PTSD score of 5.436, compared to the standard deviation of 4.062 in bicycle group and 3.867 in car group.  
 
+### b)
+
+$H_0$: All the group means are equal.  
+$H_1$: Not all the group means are equal.
+
+```{r}
+crash_df = 
+  pivot_longer(
+    data = crash_df,
+    cols = pedestrian:car,
+    names_to = "crash_type",
+    values_to = "ptsd_score"
+  )
+
+crash_anova = aov(ptsd_score ~ factor(crash_type), data = crash_df) 
+
+summary(crash_anova)
+
+f_stats = summary(crash_anova)[[1]][["F value"]][1]
+f_crit = qf(0.99, 2, 22)
+```
+
+$F_{stats} = 19.533$  
+$F_{crit} = 5.719$  
+$F_{stats} > F_{crit}$  
+
+With a type I error of 0.01, we have enough evidence to reject $H_0$. We can draw a conclusion that not all the group means of PTSD score are equal
+
 ```{r}
 
 ```
