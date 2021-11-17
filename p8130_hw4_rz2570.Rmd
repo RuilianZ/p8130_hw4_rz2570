@@ -155,10 +155,10 @@ $H_0$: the proportions of relapse among drug/placebo are equal; and proportions 
 $H_1$: not all the proportions are equal.  
 
 ```{r}
-pchisq(1.54, 2)
+pchisq(1.54, 2, lower.tail = FALSE)
 ```
 
-$p-value = 0.537$  
+$p-value = 0.463$  
 $\chi_{stats} = 1.543$  
 $\chi_{crit} = 5.991$  
 $\chi_{stats} < \chi_{crit}$  
